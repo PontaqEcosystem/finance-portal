@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Pontaq LLP – Finance dashboard</title>
+<style>
+  html,body{margin:0;height:100%;background:#EEF2F7;font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:#5B6B80}
+  #boot{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;font-size:14px}
+  #boot .sp{width:26px;height:26px;border-radius:50%;border:3px solid #D9E0EA;border-top-color:#163A63;animation:s 0.9s linear infinite}
+  @keyframes s{to{transform:rotate(360deg)}}
+  #boot button{display:none;padding:8px 14px;border:1px solid #C9D2DE;border-radius:8px;background:#fff;color:#13233A;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="boot"><div class="sp"></div><div id="msg">Loading Pontaq finance dashboard…</div><button id="again" type="button">Try again</button></div>
+<script>
+/* Pontaq LLP finance dashboard. This page only loads the dashboard from the Pontaq Apps Script
+   backend; sign-in, data and permissions are all checked there. */
+(function () {
+  var API = 'https://script.google.com/macros/s/AKfycbxyufpQ73r6zju0mCcwXTATCNFTArEI3111BcJ5Q-wnO-3BqCokJTN4u7f9CZJ_pF85ng/exec';
+  function load() {
+    document.getElementById('msg').textContent = 'Loading Pontaq finance dashboard…';
+    document.getElementById('again').style.display = 'none';
+    fetch(API, { method: 'POST', body: JSON.stringify({ action: 'page' }) })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (j.err) throw new Error(j.err);
+        document.open(); document.write(j.html); document.close();
+      })
+      .catch(function (e) {
+        document.getElementById('msg').textContent = 'Couldn’t load the dashboard. Check your connection and try again.';
+        document.getElementById('again').style.display = 'inline-block';
+      });
+  }
+  document.getElementById('again').onclick = load;
+  load();
+})();
+</script>
+</body>
+</html>
